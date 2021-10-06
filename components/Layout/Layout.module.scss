@@ -1,0 +1,13 @@
+.headerBar {
+  font-size: x-large;
+  font-weight: 700;
+  background-color: lightgray;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  img:hover {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,64 @@
+@import '/styles/variables.scss';
+
+.tableWrapper {
+  color: $color-primary;
+  width: 100%;
+  font-size: 14px;
+  line-height: 24px;
+
+  thead {
+    z-index: 2;
+    background-color: lightgrey;
+    position: sticky;
+    top: 0px;
+    font-weight: $fw-bold;
+    box-shadow: inset 0px -1px 0px #c9cfda;
+    td {
+      padding-top: 12px;
+      padding-left: 6px;
+    }
+  }
+
+  tr {
+    transition: 0.2s;
+    font-weight: $fw-regular;
+    box-shadow: inset 0px -1px 0px #dfe2e9;
+    text-align: center;
+    td {
+      padding: 14px 0px 14px 12px;
+    }
+    &:hover {
+      background-color: lightgray;
+      cursor: pointer;
+    }
+    // background-color: black;
+  }
+  table-layout: fixed;
+}
+
+.charName {
+  display: flex;
+  margin-left: 12px;
+  align-items: center;
+}
+
+.buttonBlock {
+  transition: 0.4s;
+  z-index: 2;
+  position: fixed;
+  bottom: 0px;
+  background-color: black;
+  color: white;
+  display: flex;
+  // width: 100%;
+}
+
+.buttonContainer {
+  :hover {
+    cursor: pointer;
+  }
+}
+
+.loadingBlock {
+  transition: 1s;
+}

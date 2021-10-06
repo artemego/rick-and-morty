@@ -1,0 +1,14 @@
+.characterWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.characterInfo {
+  margin-top: 20px;
+  border-radius: 10px;
+  padding: 10px;
+  // background-color: lightgray;
+  border: 5px solid lightgray;
+  max-width: 60ch;
+}
