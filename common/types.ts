@@ -1,10 +1,12 @@
-enum Gender {
-  Male = 'male',
-  Female = 'female',
+export enum Gender {
+  Male = 'Male',
+  Female = 'Female',
+  Unknown = 'unknown',
 }
-enum Status {
-  Alive = 'alive',
-  Dead = 'dead',
+export enum Status {
+  Alive = 'Alive',
+  Dead = 'Dead',
+  Unknown = 'unknown',
 }
 
 export interface ICharacter {
@@ -12,7 +14,7 @@ export interface ICharacter {
   name: string;
   status: Status; //enum
   gender: Gender; //enum
-  created: Date;
+  created: string;
   episode: string[];
   image: string;
   location: {
@@ -38,11 +40,11 @@ export interface IInfo {
 export interface IEpisode {
   id: number;
   name: string;
-  air_date: Date;
+  air_date: string;
   episode: string;
   characters: string[];
   url: string;
-  created: Date;
+  created: string;
 }
 
 export interface ILocation {
@@ -52,7 +54,7 @@ export interface ILocation {
   dimension: string;
   residents: string[];
   url: string;
-  created: Date;
+  created: string;
 }
 
 export interface IItems {

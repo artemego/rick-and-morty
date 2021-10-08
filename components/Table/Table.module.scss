@@ -1,59 +1,97 @@
 @import '/styles/variables.scss';
+@import '/styles/mixins.scss';
 
 .tableWrapper {
   color: $color-primary;
   width: 100%;
   font-size: 14px;
   line-height: 24px;
-
+  box-shadow: 0 5px 10px lightgray;
+  text-align: left;
+  border-collapse: collapse;
   thead {
+    box-shadow: 0 5px 10px lightgray;
     z-index: 2;
     background-color: lightgrey;
     position: sticky;
     top: 0px;
     font-weight: $fw-bold;
     box-shadow: inset 0px -1px 0px #c9cfda;
-    td {
-      padding-top: 12px;
-      padding-left: 6px;
-    }
   }
 
   tr {
     transition: 0.2s;
     font-weight: $fw-regular;
     box-shadow: inset 0px -1px 0px #dfe2e9;
-    text-align: center;
-    td {
-      padding: 14px 0px 14px 12px;
+
+    th {
+      padding: 1rem 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      font-weight: $fw-bold;
+      &:nth-child(1) {
+        width: 5%;
+        @include breakpoint(phone) {
+          width: auto;
+        }
+      }
+      &:nth-child(2) {
+        width: 40%;
+        @include breakpoint(phone) {
+          width: auto;
+        }
+      }
     }
+
+    td {
+      padding: 1rem 2rem;
+    }
+
+    th,
+    td {
+      @include breakpoint(tablet) {
+        padding: 5px 10px;
+      }
+      @include breakpoint(phone) {
+        padding: 5px 5px;
+      }
+    }
+
     &:hover {
       background-color: lightgray;
       cursor: pointer;
     }
-    // background-color: black;
   }
   table-layout: fixed;
+
+  @include breakpoint(phone) {
+    table-layout: initial;
+  }
 }
 
 .charName {
   display: flex;
-  margin-left: 12px;
   align-items: center;
+  .imgBlock {
+    @include breakpoint(phone) {
+      display: none;
+    }
+  }
 }
 
 .buttonBlock {
-  transition: 0.4s;
+  // transition: 0.4s;
+  opacity: 0.8;
   z-index: 2;
   position: fixed;
   bottom: 0px;
   background-color: black;
   color: white;
   display: flex;
-  // width: 100%;
 }
 
 .buttonContainer {
+  padding: 10px;
   :hover {
     cursor: pointer;
   }
@@ -61,4 +99,26 @@
 
 .loadingBlock {
   transition: 1s;
+}
+
+.status {
+  width: fit-content;
+  border-radius: 4px;
+  border: 1px solid;
+  padding: 1px 12px;
+  &Red {
+    color: $color-red;
+  }
+  &Green {
+    color: $color-green;
+  }
+  &Blue {
+    color: blue;
+  }
+  &Yellow {
+    color: $color-yellow;
+  }
+  &Pink {
+    color: $color-pink;
+  }
 }

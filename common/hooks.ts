@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import type { AppDispatch, AppState } from '../state/store';
@@ -6,3 +7,11 @@ import type { AppDispatch, AppState } from '../state/store';
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
+
+export function usePrevious<T>(value: T) {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}

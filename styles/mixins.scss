@@ -1,0 +1,31 @@
+@import '/styles/variables.scss';
+
+// breakpoints
+
+@mixin breakpoint($point) {
+  @if $point == desktop {
+    @media screen and (max-width: 1824px) {
+      @content;
+    }
+  }
+  @if $point == laptop {
+    @media screen and (max-width: 1200px) {
+      @content;
+    }
+  }
+  @if $point == tablet {
+    @media screen and (max-width: 992px) {
+      @content;
+    }
+  }
+  @if $point == tabletOnly {
+    @media screen and (max-width: 992px) and (min-width: 768px) {
+      @content;
+    }
+  }
+  @if $point == phone {
+    @media screen and (max-width: 768px) {
+      @content;
+    }
+  }
+}

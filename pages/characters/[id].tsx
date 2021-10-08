@@ -46,6 +46,26 @@ interface Params extends ParsedUrlQuery {
   id: string;
 }
 
+const formatDateString = (dateString: string): string => {
+  let date = new Date(dateString);
+  // console.log(dateString);
+
+  let year = date.getFullYear();
+  let month: number | string = date.getMonth() + 1;
+  let day: number | string = date.getDate();
+
+  if (day < 10) {
+    day = '0' + day;
+  }
+  if (month < 10) {
+    month = '0' + month;
+  }
+
+  let formattedDate = day + '-' + month + '-' + year;
+
+  return formattedDate;
+};
+
 export const getStaticProps: GetStaticProps<Props, Params> = async (
   context
 ) => {
@@ -64,6 +84,16 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (
     (ep) => ep.match(/\d+/g)?.join('') || ''
   );
   const episodes = await getEpisodesApi(episodeNumbers);
+
+  // format dates
+  character.created = formatDateString(character.created);
+  if (location) {
+    location.created = formatDateString(location.created);
+  }
+  if (origin && origin !== location) {
+    origin.created = formatDateString(origin.created);
+  }
+
   return {
     props: { character, location, origin, episodes },
   };

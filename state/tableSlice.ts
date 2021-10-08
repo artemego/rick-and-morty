@@ -23,14 +23,12 @@ const table = createSlice({
   extraReducers: {
     [getItems.fulfilled.type]: (state, { payload }) => {
       state.loading = false;
-      // console.log(payload);
       // set new info
       state.info = payload.info;
       // set new characters
       state.chars = payload.results;
     },
     [getItems.pending.type]: (state) => {
-      // console.log('getting items');
       state.loading = true;
     },
   },

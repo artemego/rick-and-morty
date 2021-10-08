@@ -24,11 +24,9 @@ export async function getEpisodesApi(
   ids: string[]
 ): Promise<IEpisode[] | IEpisode> {
   const episodeIds: string = ids.join(',');
-  // console.log(episodeIds);
   const response = await fetch(
     `https://rickandmortyapi.com/api/episode/${episodeIds}`
   );
   const result = await response.json();
-  // console.log(result);
   return result;
 }

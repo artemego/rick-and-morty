@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { selectPage, nextPage, prevPage } from '../../state/optionsSlice';
+import {
+  selectPage,
+  nextPage,
+  prevPage,
+  selectScrollY,
+  setScrollY,
+} from '../../state/optionsSlice';
 import { getItems, selectChars, selectInfo } from '../../state/tableSlice';
 import { ChTable } from './ChTable';
 import styles from './Table.module.scss';
@@ -14,24 +20,25 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
   const info = useAppSelector(selectInfo);
   const page = useAppSelector(selectPage);
   const loading = useAppSelector((state) => state.table.loading);
+  const scrollY = useAppSelector(selectScrollY);
 
   const tableRef = useRef<HTMLTableElement>(null);
-
-  // get items with state from redux
-  // useEffect(() => {
-  //   dispatch(getItems(page));
-  // }, [dispatch, page]);
+  const isFirstRender = useRef<boolean | null>(true);
 
   useEffect(() => {
-    console.log('works');
-    handleScrollReset(tableRef);
+    window.scrollTo(0, scrollY);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!isFirstRender.current) handleScrollReset(tableRef);
     dispatch(getItems(page));
+    isFirstRender.current = false;
   }, [dispatch, page]);
 
   const handleScrollReset = (
     tableRef: React.RefObject<HTMLTableElement>
   ): void => {
-    tableRef.current?.scrollIntoView({ behavior: 'smooth' });
+    tableRef.current?.scrollIntoView({ behavior: 'auto' });
   };
 
   const handleNextClick = () => {
@@ -41,9 +48,17 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
     return page > 1 && dispatch(prevPage());
   };
 
+  const handleRowClick = () => {
+    dispatch(setScrollY(window.pageYOffset));
+  };
+
   return (
     <div>
-      <ChTable chars={chars} tableRef={tableRef} />
+      <ChTable
+        chars={chars}
+        tableRef={tableRef}
+        handleRowClick={handleRowClick}
+      />
       <div className={styles.buttonBlock}>
         <TableButton handleClick={handlePrevClick} tableButtonType="prev" />
         <TableButton handleClick={handleNextClick} tableButtonType="next" />
