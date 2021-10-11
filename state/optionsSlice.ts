@@ -20,6 +20,12 @@ const options = createSlice({
         page: state.page - 1,
       };
     },
+    setPage: (state, action) => {
+      return {
+        ...state,
+        page: action.payload,
+      };
+    },
     setScrollY: (state, action) => {
       return {
         ...state,
@@ -32,6 +38,6 @@ const options = createSlice({
 export const selectPage = (state: AppState) => state.options.page;
 export const selectScrollY = (state: AppState) => state.options.scrollY;
 
-export const { nextPage, prevPage, setScrollY } = options.actions;
+export const { nextPage, prevPage, setScrollY, setPage } = options.actions;
 
 export default options.reducer;

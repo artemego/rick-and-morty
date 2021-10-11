@@ -23,8 +23,14 @@ const table = createSlice({
   extraReducers: {
     [getItems.fulfilled.type]: (state, { payload }) => {
       state.loading = false;
-      // set new info
-      state.info = payload.info;
+      // set new info if info changed
+      if (
+        state.info.count !== payload.info.count ||
+        state.info.pages !== payload.info.pages
+      ) {
+        state.info = payload.info;
+      }
+
       // set new characters
       state.chars = payload.results;
     },

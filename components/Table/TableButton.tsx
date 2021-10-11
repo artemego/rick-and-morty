@@ -5,14 +5,21 @@ import Image from 'next/image';
 interface TableButtonProps {
   tableButtonType: string;
   handleClick: () => void;
+  disabled: boolean;
 }
 
 export const TableButton: React.FC<TableButtonProps> = ({
   tableButtonType,
   handleClick,
+  disabled,
 }) => {
   return (
-    <div className={styles.buttonContainer}>
+    <button
+      className={`${styles.buttonContainer} ${
+        disabled && styles.buttonContainerDisabled
+      }`}
+      disabled={disabled}
+    >
       <div className={styles.imgContainer} onClick={handleClick}>
         <Image
           width="18px"
@@ -25,6 +32,6 @@ export const TableButton: React.FC<TableButtonProps> = ({
           alt={`${tableButtonType} button`}
         />
       </div>
-    </div>
+    </button>
   );
 };
