@@ -1,3 +1,19 @@
+## About project
+Table of characters from the show rick and morty.
+
+Api used: https://rickandmortyapi.com/
+
+Table design: https://www.figma.com/community/file/769876453966544014
+## Additional functionality
+
+ - character filtering with column search
+ - individual character pages with information
+ - table page controls
+
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
