@@ -12,3 +12,10 @@
   border: 5px solid lightgray;
   max-width: 60ch;
 }
+
+.blankPage {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}

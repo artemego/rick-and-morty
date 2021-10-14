@@ -30,26 +30,46 @@ export async function getItemsApi(page = 1, params?: IParams): Promise<IItems> {
   console.log(result);
   return result;
 }
-export async function getCharApi(id: string | string[]): Promise<ICharacter> {
-  const response = await fetch(
-    `https://rickandmortyapi.com/api/character/${id}`
-  );
-  const result: ICharacter = await response.json();
-  return result;
+export async function getCharApi(
+  id: string | string[]
+): Promise<ICharacter | null> {
+  try {
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/character/${id}`
+    );
+    if (!response.ok) throw response.statusText;
+    const result: ICharacter = await response.json();
+    return result;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }
 
-export async function getLocationApi(url: string): Promise<ILocation> {
-  const response = await fetch(url);
-  const result = await response.json();
-  return result;
+export async function getLocationApi(url: string): Promise<ILocation | null> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw response.statusText;
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }
 export async function getEpisodesApi(
   ids: string[]
-): Promise<IEpisode[] | IEpisode> {
-  const episodeIds: string = ids.join(',');
-  const response = await fetch(
-    `https://rickandmortyapi.com/api/episode/${episodeIds}`
-  );
-  const result = await response.json();
-  return result;
+): Promise<IEpisode[] | IEpisode | null> {
+  try {
+    const episodeIds: string = ids.join(',');
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/episode/${episodeIds}`
+    );
+    if (!response.ok) throw response.statusText;
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }

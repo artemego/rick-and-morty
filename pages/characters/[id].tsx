@@ -36,10 +36,10 @@ export const getStaticPaths = async () => {
 };
 
 type Props = {
-  character: ICharacter;
+  character: ICharacter | null;
   location: ILocation | null;
   origin: ILocation | null;
-  episodes: IEpisode | IEpisode[];
+  episodes: IEpisode | IEpisode[] | null;
 };
 
 interface Params extends ParsedUrlQuery {
@@ -71,32 +71,43 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (
 ) => {
   const params = context.params!;
   const character = await getCharApi(params.id);
-  const location = !character.location.url
-    ? null
-    : await getLocationApi(character.location.url);
+  if (character) {
+    const location = !character.location.url
+      ? null
+      : await getLocationApi(character.location.url);
 
-  const origin = !character.origin.url
-    ? null
-    : character.location?.url === character.origin?.url
-    ? location
-    : await getLocationApi(character.origin.url);
-  const episodeNumbers: string[] = character.episode.map(
-    (ep) => ep.match(/\d+/g)?.join('') || ''
-  );
-  const episodes = await getEpisodesApi(episodeNumbers);
+    const origin = !character.origin.url
+      ? null
+      : character.location?.url === character.origin?.url
+      ? location
+      : await getLocationApi(character.origin.url);
+    const episodeNumbers: string[] = character.episode.map(
+      (ep) => ep.match(/\d+/g)?.join('') || ''
+    );
+    const episodes = await getEpisodesApi(episodeNumbers);
 
-  // format dates
-  character.created = formatDateString(character.created);
-  if (location) {
-    location.created = formatDateString(location.created);
+    // format dates
+    character.created = formatDateString(character.created);
+    if (location) {
+      location.created = formatDateString(location.created);
+    }
+    if (origin && origin !== location) {
+      origin.created = formatDateString(origin.created);
+    }
+
+    return {
+      props: { character, location, origin, episodes },
+    };
+  } else {
+    return {
+      props: {
+        character: null,
+        location: null,
+        origin: null,
+        episodes: null,
+      },
+    };
   }
-  if (origin && origin !== location) {
-    origin.created = formatDateString(origin.created);
-  }
-
-  return {
-    props: { character, location, origin, episodes },
-  };
 };
 
 const CharacterContainer: NextPage<Props> = ({
