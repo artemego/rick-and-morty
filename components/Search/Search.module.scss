@@ -1,0 +1,53 @@
+@import '/styles/variables.scss';
+.searchContainer {
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  top: 0px;
+  z-index: 2;
+
+  input {
+    all: unset;
+    margin-right: 10px;
+    background-color: $color-primary;
+    color: white;
+    padding: 5px 5px;
+    width: 60%;
+    max-width: 60%;
+    font-size: 20px;
+  }
+
+  .selectContainer {
+    position: relative;
+    color: white;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+  }
+
+  .selectMenu {
+    position: relative;
+    font-size: 20px;
+    padding: 5px 20px 5px 5px;
+    background-color: $color-primary;
+    color: white;
+    border: 0;
+    outline: none;
+  }
+
+  .customArrow {
+    position: absolute;
+    display: block;
+    background: $color-pink;
+    height: 1rem;
+    width: 1rem;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 30px;
+    pointer-events: none;
+  }
+}

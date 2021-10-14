@@ -9,6 +9,14 @@ export enum Status {
   Unknown = 'unknown',
 }
 
+export enum Params {
+  name = 'name',
+  status = 'status',
+  species = 'species',
+  type = 'type',
+  gender = 'gender',
+}
+
 export interface ICharacter {
   id: number;
   name: string;
@@ -59,5 +67,13 @@ export interface ILocation {
 
 export interface IItems {
   info: IInfo;
-  results: ICharacter[];
+  results: ICharacter[] | [];
+}
+
+export interface IParams {
+  name?: string;
+  status?: Status;
+  species?: string;
+  type?: string;
+  gender?: Gender;
 }

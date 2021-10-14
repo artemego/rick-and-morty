@@ -1,12 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ICharacter, IInfo } from '../common/types';
+import { ICharacter, IInfo, IItems, IParams } from '../common/types';
 import { getItemsApi } from '../pages/api/items';
 import { AppState } from './store';
 
 export const getItems = createAsyncThunk(
   'table/getItems',
-  async (page?: number) => {
-    const data = await getItemsApi(page);
+  async ({
+    page,
+    params,
+  }: {
+    page?: number;
+    params?: IParams;
+  }): Promise<IItems> => {
+    const data = await getItemsApi(page, params);
+    // кажется, мне надо здесь выкидывать ошибку
     return data;
   }
 );
@@ -22,6 +29,7 @@ const table = createSlice({
   reducers: {},
   extraReducers: {
     [getItems.fulfilled.type]: (state, { payload }) => {
+      console.log('in fulfilled');
       state.loading = false;
       // set new info if info changed
       if (
@@ -33,6 +41,13 @@ const table = createSlice({
 
       // set new characters
       state.chars = payload.results;
+    },
+    [getItems.rejected.type]: (state, { payload }) => {
+      console.log('in rejected');
+      state.loading = false;
+      // set blank info and items from api
+      state.info = { pages: 0, count: 0 };
+      state.chars = [];
     },
     [getItems.pending.type]: (state) => {
       state.loading = true;

@@ -11,3 +11,12 @@
     cursor: pointer;
   }
 }
+
+.iconContainer {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.searchButton {
+  all: unset;
+}

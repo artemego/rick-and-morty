@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  usePrevious,
+} from '../../common/hooks';
 import {
   selectPage,
   nextPage,
@@ -7,13 +11,15 @@ import {
   selectScrollY,
   setScrollY,
   setPage,
+  selectSearchCol,
+  selectSearchText,
 } from '../../state/optionsSlice';
 import { getItems, selectChars, selectInfo } from '../../state/tableSlice';
 import { ChTable } from './ChTable';
 import styles from './Table.module.scss';
 import { TableButton } from './TableButton';
 import debounce from 'lodash.debounce';
-import { IInfo } from '../../common/types';
+import { IInfo, IParams } from '../../common/types';
 
 interface ChTableProps {}
 
@@ -23,33 +29,56 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
   const info = useAppSelector(selectInfo);
   const page = useAppSelector(selectPage);
   const loading = useAppSelector((state) => state.table.loading);
+
+  // options data from redux
   const scrollY = useAppSelector(selectScrollY);
+  const searchCol = useAppSelector(selectSearchCol);
+  const searchText = useAppSelector(selectSearchText);
+
   const [pageInput, setPageInput] = useState<number>(page);
   const [pageError, setPageError] = useState<boolean>(false);
 
-  const tableRef = useRef<HTMLTableElement>(null);
+  const tablePageRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const isFirstRender = useRef<boolean | null>(true);
 
   const isFirstPage = page === 1;
   const isLastPage = page === info.pages;
+
+  const previousColumn = usePrevious(searchCol);
+
   useEffect(() => {
     window.scrollTo(0, scrollY);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!isFirstRender.current) handleScrollReset(tableRef);
-    dispatch(getItems(page));
-    isFirstRender.current = false;
+    if (!isFirstRender.current) handleScrollReset(tablePageRef);
+    const params: IParams = { [searchCol]: searchText };
+    dispatch(getItems({ page, params }));
+
     // set page input
     setPageInput(page);
     setPageError(false);
-  }, [dispatch, page]);
+  }, [dispatch, page]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    // don't get new items if we go back from another page (on first render)
+    // don't get new items if the input text is blank and search column changed
+    const columnChangedAndNoText = previousColumn != searchCol && !searchText;
+
+    if (!isFirstRender.current && !columnChangedAndNoText) {
+      const params: IParams = { [searchCol]: searchText };
+      dispatch(getItems({ page: 1, params }));
+      dispatch(setPage(1));
+    }
+
+    isFirstRender.current = false;
+  }, [searchCol, searchText]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleScrollReset = (
-    tableRef: React.RefObject<HTMLTableElement>
+    tablePageRef: React.RefObject<HTMLDivElement>
   ): void => {
-    tableRef.current?.scrollIntoView({ behavior: 'auto' });
+    tablePageRef.current?.scrollIntoView({ behavior: 'auto' });
   };
 
   const handleNextClick = () => {
@@ -93,12 +122,13 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
   };
 
   return (
-    <div>
-      <ChTable
-        chars={chars}
-        tableRef={tableRef}
-        handleRowClick={handleRowClick}
-      />
+    <div className={styles.tablePageWrapper} ref={tablePageRef}>
+      {!chars.length ? (
+        <div className={styles.blankContainer}>No characters were found...</div>
+      ) : (
+        <ChTable chars={chars} handleRowClick={handleRowClick} />
+      )}
+
       <div className={styles.buttonBlock}>
         <TableButton
           handleClick={handlePrevClick}

@@ -1,10 +1,33 @@
-import { ICharacter, IEpisode, IItems, ILocation } from '../../common/types';
+import {
+  Gender,
+  ICharacter,
+  IEpisode,
+  IItems,
+  ILocation,
+  IParams,
+  Status,
+} from '../../common/types';
 
-export async function getItemsApi(page = 1): Promise<IItems> {
+export async function getItemsApi(page = 1, params?: IParams): Promise<IItems> {
+  let queryParams: string;
+  if (params) {
+    queryParams = Object.entries(params)
+      .map((entrie) => {
+        return `${entrie[0]}=${entrie[1]}`;
+      })
+      .join('&');
+    console.log(queryParams);
+  } else {
+    queryParams = '';
+  }
+
   const response = await fetch(
-    `https://rickandmortyapi.com/api/character/?page=${page}`
+    `https://rickandmortyapi.com/api/character/?page=${page}&${queryParams}`
   );
+  console.log(response);
+  if (!response.ok) throw response.statusText;
   const result: IItems = await response.json();
+  console.log(result);
   return result;
 }
 export async function getCharApi(id: string | string[]): Promise<ICharacter> {
