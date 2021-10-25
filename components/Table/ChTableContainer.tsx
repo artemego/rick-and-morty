@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   useAppDispatch,
   useAppSelector,
   usePrevious,
-} from '../../common/hooks';
+} from "../../common/hooks";
 import {
   selectPage,
   nextPage,
@@ -13,13 +13,14 @@ import {
   setPage,
   selectSearchCol,
   selectSearchText,
-} from '../../state/optionsSlice';
-import { getItems, selectChars, selectInfo } from '../../state/tableSlice';
-import { ChTable } from './ChTable';
-import styles from './Table.module.scss';
-import { TableButton } from './TableButton';
-import debounce from 'lodash.debounce';
-import { IInfo, IParams } from '../../common/types';
+} from "../../state/optionsSlice";
+import { getItems, selectChars, selectInfo } from "../../state/tableSlice";
+import { ChTable, ChTableMemo } from "./ChTable";
+import styles from "./Table.module.scss";
+import { TableButton } from "./TableButton";
+import debounce from "lodash.debounce";
+import { IInfo, IParams } from "../../common/types";
+import { ClipLoader } from "react-spinners";
 
 interface ChTableProps {}
 
@@ -29,6 +30,7 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
   const info = useAppSelector(selectInfo);
   const page = useAppSelector(selectPage);
   const loading = useAppSelector((state) => state.table.loading);
+  const error = useAppSelector((state) => state.table.error);
 
   // options data from redux
   const scrollY = useAppSelector(selectScrollY);
@@ -78,7 +80,7 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
   const handleScrollReset = (
     tablePageRef: React.RefObject<HTMLDivElement>
   ): void => {
-    tablePageRef.current?.scrollIntoView({ behavior: 'auto' });
+    tablePageRef.current?.scrollIntoView({ behavior: "auto" });
   };
 
   const handleNextClick = () => {
@@ -88,18 +90,16 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
     return page > 1 && dispatch(prevPage());
   };
 
-  const handleRowClick = () => {
+  const handleRowClick = useCallback(() => {
     dispatch(setScrollY(window.pageYOffset));
-  };
+  }, [dispatch]);
 
   const dispatchPageWithCheck = (nextPageNum: number, info: IInfo) => {
     // check for page validity
-    console.log(nextPageNum, info);
-
     if (nextPageNum >= 1 && nextPageNum <= info.pages)
       dispatch(setPage(nextPageNum));
     else {
-      new Error('Error in set page');
+      new Error("Error in set page");
       setPageError(true);
     }
   };
@@ -110,8 +110,7 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nextPageNum = +e.target.value.replace(/\D/, '');
-    console.log(nextPageNum);
+    const nextPageNum = +e.target.value.replace(/\D/, "");
     setPageInput(nextPageNum);
     debouncedSave(nextPageNum, info);
   };
@@ -124,39 +123,57 @@ export const ChTableContainer: React.FC<ChTableProps> = ({}) => {
   return (
     <div className={styles.tablePageWrapper} ref={tablePageRef}>
       {!chars.length ? (
-        <div className={styles.blankContainer}>No characters were found...</div>
+        <div className={styles.blankContainer}>
+          {loading && <ClipLoader loading={loading} size={24} color="orange" />}
+          {!error && !loading ? (
+            <div>
+              No characters were found with{" "}
+              <span>
+                {searchCol} &quot;{searchText}
+                &quot;
+              </span>
+            </div>
+          ) : (
+            <div className={styles.errorContainer}>{error}</div>
+          )}
+        </div>
       ) : (
-        <ChTable chars={chars} handleRowClick={handleRowClick} />
+        <ChTableMemo chars={chars} handleRowClick={handleRowClick} />
       )}
 
-      <div className={styles.buttonBlock}>
-        <TableButton
-          handleClick={handlePrevClick}
-          tableButtonType="prev"
-          disabled={isFirstPage}
-        />
-        <TableButton
-          handleClick={handleNextClick}
-          tableButtonType="next"
-          disabled={isLastPage}
-        />
-        <div className={styles.infoBlock}>
-          <input
-            ref={inputRef}
-            type="text"
-            pattern="[0-9]*"
-            className={`${styles.infoBlockInput} ${
-              pageError && styles.infoBlockInputError
-            }`}
-            value={pageInput}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-          />
-          <div>/{info.pages}</div>
+      {!!chars.length && (
+        <div className={styles.buttonBlock}>
+          <div className={`wrapper ${styles.buttonWrapper}`}>
+            <TableButton
+              handleClick={handlePrevClick}
+              tableButtonType="prev"
+              disabled={isFirstPage}
+            />
+            <TableButton
+              handleClick={handleNextClick}
+              tableButtonType="next"
+              disabled={isLastPage}
+            />
+            <div className={styles.infoBlock}>
+              <input
+                ref={inputRef}
+                type="text"
+                pattern="[0-9]*"
+                className={`${styles.infoBlockInput} ${
+                  pageError && styles.infoBlockInputError
+                }`}
+                value={pageInput}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+              />
+              <div>/{info.pages}</div>
+            </div>
+            <div className={styles.loadingBlock}>
+              <ClipLoader loading={loading} size={24} color="orange" />
+            </div>
+          </div>
         </div>
-
-        {loading && <div className={styles.loadingBlock}>Loading...</div>}
-      </div>
+      )}
     </div>
   );
 };

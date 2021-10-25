@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ICharacter, IInfo, IItems, IParams } from '../common/types';
-import { getItemsApi } from '../pages/api/items';
-import { AppState } from './store';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ICharacter, IInfo, IItems, IParams } from "../common/types";
+import { getItemsApi } from "../pages/api/items";
+import { AppState } from "./store";
 
 export const getItems = createAsyncThunk(
-  'table/getItems',
+  "table/getItems",
   async ({
     page,
     params,
@@ -19,7 +19,7 @@ export const getItems = createAsyncThunk(
 );
 
 const table = createSlice({
-  name: 'table',
+  name: "table",
   initialState: {
     loading: false,
     error: null,
@@ -29,7 +29,6 @@ const table = createSlice({
   reducers: {},
   extraReducers: {
     [getItems.fulfilled.type]: (state, { payload }) => {
-      console.log('in fulfilled');
       state.loading = false;
       // set new info if info changed
       if (
@@ -42,14 +41,17 @@ const table = createSlice({
       // set new characters
       state.chars = payload.results;
     },
-    [getItems.rejected.type]: (state, { payload }) => {
-      console.log('in rejected');
+    [getItems.rejected.type]: (state, action) => {
       state.loading = false;
       // set blank info and items from api
       state.info = { pages: 0, count: 0 };
       state.chars = [];
+      if (action.error.message !== "Rejected") {
+        state.error = action.error.message;
+      }
     },
     [getItems.pending.type]: (state) => {
+      state.error = null;
       state.loading = true;
     },
   },

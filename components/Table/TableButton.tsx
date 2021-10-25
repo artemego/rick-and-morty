@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from './Table.module.scss';
-import Image from 'next/image';
+import React from "react";
+import styles from "./Table.module.scss";
+import Image from "next/image";
 
 interface TableButtonProps {
   tableButtonType: string;
@@ -19,15 +19,16 @@ export const TableButton: React.FC<TableButtonProps> = ({
         disabled && styles.buttonContainerDisabled
       }`}
       disabled={disabled}
+      onClick={handleClick}
     >
-      <div className={styles.imgContainer} onClick={handleClick}>
+      <div className={styles.imgContainer}>
         <Image
           width="18px"
           height="18px"
           src={
-            tableButtonType === 'prev'
-              ? '/static/arrow-icon-left.svg'
-              : '/static/arrow-icon-right.svg'
+            tableButtonType === "prev"
+              ? "/static/arrow-icon-left.svg"
+              : "/static/arrow-icon-right.svg"
           }
           alt={`${tableButtonType} button`}
         />

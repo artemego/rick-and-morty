@@ -1,18 +1,18 @@
-import Link from 'next/link';
-import React, { RefObject } from 'react';
-import { ICharacter, Status, Gender } from '../../common/types';
-import Image from 'next/image';
-import styles from './Table.module.scss';
+import Link from "next/link";
+import React, { RefObject } from "react";
+import { ICharacter, Status, Gender } from "../../common/types";
+import Image from "next/image";
+import styles from "./Table.module.scss";
 
 const statusClassnames = {
-  [Status.Alive]: 'statusGreen',
-  [Status.Dead]: 'statusRed',
-  [Status.Unknown]: 'statusYellow',
+  [Status.Alive]: "statusGreen",
+  [Status.Dead]: "statusRed",
+  [Status.Unknown]: "statusYellow",
 };
 const genderClassnames = {
-  [Gender.Male]: 'statusBlue',
-  [Gender.Female]: 'statusPink',
-  [Status.Unknown]: 'statusYellow',
+  [Gender.Male]: "statusBlue",
+  [Gender.Female]: "statusPink",
+  [Status.Unknown]: "statusYellow",
 };
 
 interface ChTableProps {
@@ -41,7 +41,7 @@ export const ChTable: React.FC<ChTableProps> = ({
 
       <tbody>
         {chars.map((char) => (
-          <Link href={'/characters/' + char.id} passHref key={char.id}>
+          <Link href={"/characters/" + char.id} passHref key={char.id}>
             <tr onClick={handleRowClick}>
               <td>{char.id}</td>
               <td className={styles.charName}>
@@ -85,3 +85,5 @@ export const ChTable: React.FC<ChTableProps> = ({
     </table>
   );
 };
+
+export const ChTableMemo = React.memo(ChTable);

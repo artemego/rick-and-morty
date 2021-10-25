@@ -3,25 +3,24 @@ import type {
   GetStaticPropsContext,
   GetStaticPropsResult,
   NextPage,
-} from 'next';
-import React from 'react';
-import { ICharacter, IEpisode, IItems, ILocation } from '../../common/types';
-import { Character } from '../../components/Character/Character';
-import { ParsedUrlQuery } from 'querystring';
+} from "next";
+import React from "react";
+import { ICharacter, IEpisode, IItems, ILocation } from "../../common/types";
+import { Character } from "../../components/Character/Character";
+import { ParsedUrlQuery } from "querystring";
 
 import {
   getCharApi,
   getEpisodesApi,
   getItemsApi,
   getLocationApi,
-} from '../api/items';
+} from "../api/items";
 
 export const getStaticPaths = async () => {
   // get the total amount of characters
   const data = await getItemsApi();
   const paths: any = [];
 
-  console.log('generating ids');
   // generate paths ids
   for (let i = 1; i <= data.info.count; i++) {
     paths.push({
@@ -48,20 +47,19 @@ interface Params extends ParsedUrlQuery {
 
 const formatDateString = (dateString: string): string => {
   let date = new Date(dateString);
-  // console.log(dateString);
 
   let year = date.getFullYear();
   let month: number | string = date.getMonth() + 1;
   let day: number | string = date.getDate();
 
   if (day < 10) {
-    day = '0' + day;
+    day = "0" + day;
   }
   if (month < 10) {
-    month = '0' + month;
+    month = "0" + month;
   }
 
-  let formattedDate = day + '-' + month + '-' + year;
+  let formattedDate = day + "-" + month + "-" + year;
 
   return formattedDate;
 };
@@ -82,7 +80,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (
       ? location
       : await getLocationApi(character.origin.url);
     const episodeNumbers: string[] = character.episode.map(
-      (ep) => ep.match(/\d+/g)?.join('') || ''
+      (ep) => ep.match(/\d+/g)?.join("") || ""
     );
     const episodes = await getEpisodesApi(episodeNumbers);
 

@@ -6,7 +6,7 @@ import {
   ILocation,
   IParams,
   Status,
-} from '../../common/types';
+} from "../../common/types";
 
 export async function getItemsApi(page = 1, params?: IParams): Promise<IItems> {
   let queryParams: string;
@@ -15,19 +15,16 @@ export async function getItemsApi(page = 1, params?: IParams): Promise<IItems> {
       .map((entrie) => {
         return `${entrie[0]}=${entrie[1]}`;
       })
-      .join('&');
-    console.log(queryParams);
+      .join("&");
   } else {
-    queryParams = '';
+    queryParams = "";
   }
 
   const response = await fetch(
-    `https://rickandmortyapi.com/api/character/?page=${page}&${queryParams}`
+    `https://rickandmortyapi.com/api/character?page=${page}&${queryParams}`
   );
-  console.log(response);
   if (!response.ok) throw response.statusText;
   const result: IItems = await response.json();
-  console.log(result);
   return result;
 }
 export async function getCharApi(
@@ -41,7 +38,6 @@ export async function getCharApi(
     const result: ICharacter = await response.json();
     return result;
   } catch (err) {
-    console.log(err);
     return null;
   }
 }
@@ -53,7 +49,6 @@ export async function getLocationApi(url: string): Promise<ILocation | null> {
     const result = await response.json();
     return result;
   } catch (err) {
-    console.log(err);
     return null;
   }
 }
@@ -61,7 +56,7 @@ export async function getEpisodesApi(
   ids: string[]
 ): Promise<IEpisode[] | IEpisode | null> {
   try {
-    const episodeIds: string = ids.join(',');
+    const episodeIds: string = ids.join(",");
     const response = await fetch(
       `https://rickandmortyapi.com/api/episode/${episodeIds}`
     );
@@ -69,7 +64,6 @@ export async function getEpisodesApi(
     const result = await response.json();
     return result;
   } catch (err) {
-    console.log(err);
     return null;
   }
 }

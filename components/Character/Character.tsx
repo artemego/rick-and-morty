@@ -1,8 +1,8 @@
-import React from 'react';
-import { ICharacter, IEpisode, ILocation } from '../../common/types';
-import styles from './Character.module.scss';
-import Image from 'next/image';
-import { EpTable } from '../Table/EpTable';
+import React from "react";
+import { ICharacter, IEpisode, ILocation } from "../../common/types";
+import styles from "./Character.module.scss";
+import Image from "next/image";
+import { EpTable } from "../Table/EpTable";
 
 interface CharacterProps {
   character: ICharacter | null;
@@ -32,7 +32,7 @@ export const Character: React.FC<CharacterProps> = ({
           />
           <div className={styles.characterInfo}>
             <h2>
-              <span>Location{origin?.id === location?.id && '/Origin'}: </span>
+              <span>Location{origin?.id === location?.id && "/Origin"}: </span>
               {character.location.name}
             </h2>
             {location && (
@@ -107,7 +107,7 @@ export const Character: React.FC<CharacterProps> = ({
             )}
           </div>
 
-          <h2>List of episodes with this character: </h2>
+          <h2>List of episodes with {character.name}: </h2>
           {episodes && <EpTable eps={episodes} />}
         </>
       )}

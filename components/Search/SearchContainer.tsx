@@ -1,14 +1,14 @@
-import debounce from 'lodash.debounce';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { Params } from '../../common/types';
+import debounce from "lodash.debounce";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import { Params } from "../../common/types";
 import {
   selectSearchCol,
   selectSearchText,
   setSearchCol,
   setSearchText,
-} from '../../state/optionsSlice';
-import styles from './Search.module.scss';
+} from "../../state/optionsSlice";
+import styles from "./Search.module.scss";
 
 interface SearchContainerProps {}
 
@@ -32,8 +32,6 @@ export const SearchContainer: React.FC<SearchContainerProps> = ({}) => {
   };
 
   const dispatchSearchText = (searchText: string) => {
-    console.log('dispatching search text');
-
     dispatch(setSearchText(searchText));
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,9 +49,7 @@ export const SearchContainer: React.FC<SearchContainerProps> = ({}) => {
     dispatch(setSearchText(e.target.value));
   };
 
-  useEffect(() => {
-    console.log('search col changed to ' + searchCol);
-  }, [searchCol]);
+  useEffect(() => {}, [searchCol]);
 
   // initialise previous input and select option from redux
   useEffect(() => {

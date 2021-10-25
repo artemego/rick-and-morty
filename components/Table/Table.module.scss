@@ -1,5 +1,5 @@
-@import '/styles/variables.scss';
-@import '/styles/mixins.scss';
+@import "/styles/variables.scss";
+@import "/styles/mixins.scss";
 
 .tableWrapper {
   color: $color-primary;
@@ -82,10 +82,8 @@
 .buttonBlock {
   opacity: 0.9;
   z-index: 2;
-  position: sticky;
-
+  position: fixed;
   bottom: 0px;
-  background-color: black;
   color: white;
   display: flex;
   left: 0;
@@ -96,23 +94,42 @@
   position: relative;
   all: unset;
   padding: 10px;
-  :hover {
+  background-color: $color-primary-dark;
+  transition: 0.2s;
+  &:hover {
     cursor: pointer;
+    background-color: $color-primary;
   }
+
   &Disabled {
-    opacity: 0.3;
-    :hover {
+    opacity: 0.4;
+    background-color: initial;
+    &:hover {
       cursor: initial;
+      background-color: initial;
     }
   }
+}
+
+.buttonWrapper {
+  display: flex;
+  background-color: black;
 }
 
 .blankContainer {
   width: 100%;
   height: 80vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  span {
+    font-weight: bold;
+  }
+}
+
+.errorContainer {
+  color: red;
 }
 
 .infoBlock {
@@ -143,6 +160,7 @@
   transition: 1s;
   display: flex;
   align-items: center;
+  margin-left: 10px;
 }
 
 .status {
